@@ -8,36 +8,99 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { TenantsService } from './tenant.service';
 
+@ApiTags('tenants')
 @Controller('tenants')
 export class TenantsController {
   constructor(private readonly tenantsService: TenantsService) {}
 
   @Post()
-  create(@Body() dto: CreateTenantDto) {
+  @ApiOperation({ summary: 'Create a tenant' })
+  @ApiResponse({
+    status: 201,
+    description: 'Tenant created successfully',
+  })
+  public async create(@Body() dto: CreateTenantDto) {
     return this.tenantsService.create(dto);
   }
 
   @Get()
-  findAll() {
+  @ApiOperation({ summary: 'List all tenants' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of tenants',
+  })
+  public async findAll() {
     return this.tenantsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  @ApiOperation({ summary: 'Get tenant by id' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Tenant found',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Tenant not found',
+  })
+  public async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.tenantsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTenantDto) {
+  @ApiOperation({ summary: 'Update a tenant' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Tenant updated successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Tenant not found',
+  })
+  public async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateTenantDto,
+  ) {
     return this.tenantsService.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  @ApiOperation({ summary: 'Delete a tenant' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Tenant deleted successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Tenant not found',
+  })
+  public async remove(@Param('id', ParseIntPipe) id: number) {
     return this.tenantsService.remove(id);
   }
 }

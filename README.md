@@ -78,11 +78,17 @@ http://localhost:3000
 
 ---
 
-## API Usage (Postman)
+## API Usage
 
-A **Postman Collection** is provided so you can easily test all endpoints.
+You can see the endpoints with either **Swagger** or using a **Postman Collection** is provided so you can easily test all endpoints.
 
-### How to use:
+Swagger:
+
+```
+http://localhost:3000/docs
+```
+
+### How to use (Postman):
 
 1. Open Postman
 2. Click **Import**
