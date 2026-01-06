@@ -111,7 +111,7 @@ export class KnowledgeArticlesService {
     this.eventEmitter.emit(
       'duplicate_article_warning',
       new DuplicateArticleWarningEvent(
-        String(article.tenantId),
+        article.tenantId,
         article.id,
         article.title,
         duplicates.map((d) => d.id),
