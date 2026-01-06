@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Op } from 'sequelize';
+import { Op, Transaction, WhereOptions } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { KnowledgeArticle } from './knowledge-article.model';
 import { Alias } from '../aliases/alias.model';
@@ -32,7 +32,7 @@ export class KnowledgeArticlesService {
   public async findAll(filters: ListKnowledgeArticlesDto) {
     const { search, tenantId, publishedYear } = filters;
 
-    const where: any = {
+    const where: WhereOptions<KnowledgeArticle> = {
       ...(tenantId && { tenantId }),
       ...(publishedYear && { publishedYear }),
     };
@@ -62,7 +62,6 @@ export class KnowledgeArticlesService {
 
     return rows;
   }
-
 
   public async create(dto: CreateKnowledgeArticleDto) {
     const tenantExists = await this.tenantModel.findByPk(dto.tenantId);
@@ -97,19 +96,19 @@ export class KnowledgeArticlesService {
       }
 
       const duplicates = await this.detectDuplicate(article, transaction);
-      await this.emitDuplicate(article, duplicates);
+      this.emitDuplicate(article, duplicates);
 
       return article;
     });
   }
 
-  private async emitDuplicate(
+  private emitDuplicate(
     article: KnowledgeArticle,
     duplicates: KnowledgeArticle[],
   ) {
     if (!duplicates.length) return;
 
-    return this.eventEmitter.emit(
+    this.eventEmitter.emit(
       'duplicate_article_warning',
       new DuplicateArticleWarningEvent(
         String(article.tenantId),
@@ -120,7 +119,10 @@ export class KnowledgeArticlesService {
     );
   }
 
-  private async detectDuplicate(article: KnowledgeArticle, transaction: any) {
+  private async detectDuplicate(
+    article: KnowledgeArticle,
+    transaction: Transaction,
+  ): Promise<KnowledgeArticle[]> {
     return this.knowledgeArticleModel.findAll({
       where: {
         tenantId: article.tenantId,

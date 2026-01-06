@@ -30,10 +30,7 @@ export class TopicsController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body('name') name: string,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body('name') name: string) {
     return this.topicsService.update(id, name);
   }
 

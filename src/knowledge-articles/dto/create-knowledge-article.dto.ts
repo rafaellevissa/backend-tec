@@ -13,7 +13,6 @@ class AliasDto {
 }
 
 export class CreateKnowledgeArticleDto {
-
   @IsString()
   title: string;
 

@@ -4,6 +4,6 @@ import { Alias } from './alias.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([Alias])],
-  exports: [SequelizeModule]
+  exports: [SequelizeModule],
 })
 export class AliasModule {}

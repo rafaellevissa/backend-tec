@@ -32,10 +32,7 @@ export class TenantsController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateTenantDto,
-  ) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTenantDto) {
     return this.tenantsService.update(id, dto);
   }
 

@@ -1,6 +1,6 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { DuplicateArticleWarningEvent } from "../events/duplicate-article-warning.event";
-import { OnEvent } from "@nestjs/event-emitter";
+import { Injectable, Logger } from '@nestjs/common';
+import { DuplicateArticleWarningEvent } from '../events/duplicate-article-warning.event';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class DuplicateArticleListener {
@@ -13,7 +13,7 @@ export class DuplicateArticleListener {
       {
         newArticleId: event.newArticleId,
         matchedArticleIds: event.matchedArticleIds,
-      }
-    )
+      },
+    );
   }
 }

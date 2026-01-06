@@ -13,7 +13,6 @@ import { Topic } from '../topics/topic.model';
   timestamps: false,
 })
 export class KnowledgeArticleTopic extends Model<KnowledgeArticleTopic> {
-
   @ForeignKey(() => KnowledgeArticle)
   @Column({
     type: DataType.INTEGER,

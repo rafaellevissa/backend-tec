@@ -4,6 +4,6 @@ import { KnowledgeArticleTopic } from './knowledge-article-topic.model';
 
 @Module({
   imports: [SequelizeModule.forFeature([KnowledgeArticleTopic])],
-  exports: [SequelizeModule]
+  exports: [SequelizeModule],
 })
 export class KnowledgeArticleTopicModule {}

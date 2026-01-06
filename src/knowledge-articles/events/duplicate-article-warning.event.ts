@@ -1,5 +1,5 @@
 export class DuplicateArticleWarningEvent {
-  constructor (
+  constructor(
     public readonly tenantId: string,
     public readonly newArticleId: number,
     public readonly newTitle: string,

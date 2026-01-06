@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { KnowledgeArticlesService } from './knowledge-article.service';
 import { ListKnowledgeArticlesDto } from './dto/list-knowledge-articles.dto';
 import { UpdateKnowledgeArticleDto } from './dto/update-knowledge-article.dto';
@@ -6,7 +15,6 @@ import { CreateKnowledgeArticleDto } from './dto/create-knowledge-article.dto';
 
 @Controller('knowledge-articles')
 export class KnowledgeArticlesController {
-
   constructor(
     private readonly knowledgeArticlesService: KnowledgeArticlesService,
   ) {}
@@ -17,9 +25,7 @@ export class KnowledgeArticlesController {
   }
 
   @Post()
-  public async create(
-    @Body() dto: CreateKnowledgeArticleDto,
-  ) {
+  public async create(@Body() dto: CreateKnowledgeArticleDto) {
     return this.knowledgeArticlesService.create(dto);
   }
 

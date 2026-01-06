@@ -8,7 +8,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { KnowledgeArticleTopicModule } from './knowledge-article-topics/knowledge-article-topic.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
