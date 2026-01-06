@@ -6,11 +6,13 @@ import { AliasModule } from './aliases/alias.module';
 import { TopicModule } from './topics/topic.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { KnowledgeArticleTopicModule } from './knowledge-article-topics/knowledge-article-topic.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    EventEmitterModule.forRoot(),
     SequelizeModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({

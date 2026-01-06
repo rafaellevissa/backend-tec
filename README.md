@@ -1,98 +1,124 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Knowledge Base API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A multi-tenant Knowledge Base API built with **NestJS**, **Sequelize**, and **TypeScript**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This project allows tenants to manage knowledge articles with:
+- aliases
+- topics
+- duplicate detection
+- filtering and search
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Features
 
-## Project setup
+- Multi-tenant support
+- CRUD for:
+  - Tenants
+  - Knowledge Articles
+  - Topics
+- Article aliases
+- Many-to-many relationship between articles and topics
+- Duplicate article detection (event-driven)
+- Filters:
+  - by title or alias
+  - by tenant
+  - by published year
+- Database transactions
+- Ready-to-use Postman collection
 
-```bash
-$ npm install
+---
+
+## Tech Stack
+
+- **Node.js (>=18)**
+- **NestJS**
+- **TypeScript**
+- **MySQL**
+
+---
+
+## Database ER Diagram
+
+
+![ER Diagram](./docs/er.png)
+
+---
+
+## Environment Variables
+
+Create a `.env` file at the root of the project:
+
+```
+cp .env.example .env
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## Running the Project with Docker Compose
 
-# watch mode
-$ npm run start:dev
+This project can be fully started using **Docker Compose**, including the API and the database.
 
-# production mode
-$ npm run start:prod
+---
+
+### Start the Application
+
+From the project root, run:
+
+```
+docker compose up --build
 ```
 
-## Run tests
 
-```bash
-# unit tests
-$ npm run test
+The API will be available at:
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+http://localhost:3000
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## API Usage (Postman)
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+A **Postman Collection** is provided so you can easily test all endpoints.
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+### How to use:
+
+1. Open Postman
+2. Click **Import**
+3. Import the collection file:
+
+   ```
+   docs/knowledge-base-api.postman_collection.json
+   ```
+4. Set the base URL variable:
+
+   ```
+   http://localhost:3000
+   ```
+
+---
+
+#### Filters
+
+```
+GET /knowledge-articles?search=devops&tenantId=1&publishedYear=2024
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+* `search`: title or alias
+* `tenantId`: tenant filter
+* `publishedYear`: year filter
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🚨 Duplicate Detection
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+When a new knowledge article is created:
 
-## Support
+* If another article of the same tenant has:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  * the same title, or
+  * an alias matching the new title
+* A `duplicate_article_warning` event is emitted
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This event is consumed and logged for further analysis.

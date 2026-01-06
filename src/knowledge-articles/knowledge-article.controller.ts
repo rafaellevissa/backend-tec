@@ -12,19 +12,19 @@ export class KnowledgeArticlesController {
   ) {}
 
   @Get()
-  async list(@Query() query: ListKnowledgeArticlesDto) {
+  public async list(@Query() query: ListKnowledgeArticlesDto) {
     return this.knowledgeArticlesService.findAll(query);
   }
 
   @Post()
-  create(
+  public async create(
     @Body() dto: CreateKnowledgeArticleDto,
   ) {
     return this.knowledgeArticlesService.create(dto);
   }
 
   @Put(':id')
-  update(
+  public async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateKnowledgeArticleDto,
   ) {

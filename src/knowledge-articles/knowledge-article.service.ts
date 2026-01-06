@@ -8,10 +8,12 @@ import { Topic } from '../topics/topic.model';
 import { ListKnowledgeArticlesDto } from './dto/list-knowledge-articles.dto';
 import { CreateKnowledgeArticleDto } from './dto/create-knowledge-article.dto';
 import { UpdateKnowledgeArticleDto } from './dto/update-knowledge-article.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DuplicateArticleWarningEvent } from './events/duplicate-article-warning.event';
+import { Tenant } from 'src/tenants/tenant.model';
 
 @Injectable()
 export class KnowledgeArticlesService {
-
   constructor(
     @InjectModel(KnowledgeArticle)
     private readonly knowledgeArticleModel: typeof KnowledgeArticle,
@@ -19,54 +21,63 @@ export class KnowledgeArticlesService {
     @InjectModel(Alias)
     private readonly aliasModel: typeof Alias,
 
+    @InjectModel(Tenant)
+    private readonly tenantModel: typeof Tenant,
+
     private readonly sequelize: Sequelize,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async findAll(filters: ListKnowledgeArticlesDto) {
+  public async findAll(filters: ListKnowledgeArticlesDto) {
     const { search, tenantId, publishedYear } = filters;
 
-    return this.knowledgeArticleModel.findAll({
-      where: {
-        ...(tenantId && { tenantId }),
-        ...(publishedYear && { publishedYear }),
-      },
+    const where: any = {
+      ...(tenantId && { tenantId }),
+      ...(publishedYear && { publishedYear }),
+    };
 
+    if (search) {
+      where[Op.or] = [
+        { title: { [Op.like]: `%${search}%` } },
+        { '$aliases.name$': { [Op.like]: `%${search}%` } },
+      ];
+    }
+
+    const { rows } = await this.knowledgeArticleModel.findAndCountAll({
+      where,
       include: [
         {
           model: Alias,
           required: false,
-          ...(search && {
-            where: {
-              name: {
-                [Op.like]: `%${search}%`,
-              },
-            },
-          }),
         },
         {
           model: Topic,
           through: { attributes: [] },
+          required: false,
         },
       ],
-
-      ...(search && {
-        where: {
-          [Op.or]: [
-            { title: { [Op.like]: `%${search}%` } },
-          ],
-        },
-      }),
+      distinct: true,
     });
+
+    return rows;
   }
 
-  async create(dto: CreateKnowledgeArticleDto) {
+
+  public async create(dto: CreateKnowledgeArticleDto) {
+    const tenantExists = await this.tenantModel.findByPk(dto.tenantId);
+
+    if (!tenantExists) {
+      throw new NotFoundException(`Tenant with id ${dto.tenantId} not found`);
+    }
+
     return this.sequelize.transaction(async (transaction) => {
       const article = await this.knowledgeArticleModel.create(
         {
-            title: dto.title,
-            body: dto.body,
-            publishedYear: dto.publishedYear,
-            tenantId: dto.tenantId,
+          title: dto.title,
+          body: dto.body,
+          publishedYear: dto.publishedYear,
+          tenantId: dto.tenantId,
         },
         { transaction },
       );
@@ -85,23 +96,56 @@ export class KnowledgeArticlesService {
         await article.setTopics(dto.topicIds, { transaction });
       }
 
+      const duplicates = await this.detectDuplicate(article, transaction);
+      await this.emitDuplicate(article, duplicates);
+
       return article;
     });
   }
 
-  async update(
-    id: number,
-    dto: UpdateKnowledgeArticleDto,
+  private async emitDuplicate(
+    article: KnowledgeArticle,
+    duplicates: KnowledgeArticle[],
   ) {
+    if (!duplicates.length) return;
+
+    return this.eventEmitter.emit(
+      'duplicate_article_warning',
+      new DuplicateArticleWarningEvent(
+        String(article.tenantId),
+        article.id,
+        article.title,
+        duplicates.map((d) => d.id),
+      ),
+    );
+  }
+
+  private async detectDuplicate(article: KnowledgeArticle, transaction: any) {
+    return this.knowledgeArticleModel.findAll({
+      where: {
+        tenantId: article.tenantId,
+        id: { [Op.ne]: article.id },
+        [Op.or]: [{ title: article.title }],
+      },
+      include: [
+        {
+          model: this.aliasModel,
+          required: false,
+          where: { name: article.title },
+        },
+      ],
+      transaction,
+    });
+  }
+
+  public async update(id: number, dto: UpdateKnowledgeArticleDto) {
     return this.sequelize.transaction(async (transaction) => {
       const article = await this.knowledgeArticleModel.findByPk(id, {
         transaction,
       });
 
       if (!article) {
-        throw new NotFoundException(
-          'Knowledge article not found',
-        );
+        throw new NotFoundException('Knowledge article not found');
       }
 
       await article.update(

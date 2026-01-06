@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "d1c375df-6730-4346-98f4-90fe9e26cf5b",
+		"name": "Desafio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49964124",
+		"_collection_link": "https://levi-costa-fcc6b0c3-1040578.postman.co/workspace/Levi-Costa's-Workspace~8bd82906-78ec-479c-8c82-e442335219de/collection/49964124-d1c375df-6730-4346-98f4-90fe9e26cf5b?action=share&source=collection_link&creator=49964124"
+	},
+	"item": [
+		{
+			"name": "topics",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/topics",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/topics/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"topics",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/topics/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"topics",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"DevOps\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/topics",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"topics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tenants",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/tenants",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/tenants/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tenants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/tenants/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tenants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Acme Corporation\",\n  \"primaryLocale\": \"pt-BR\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/tenants",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"tenants"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "knowledge-articles",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/knowledge-articles",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"knowledge-articles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"What is DevOps 1?\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/knowledge-articles/3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"knowledge-articles",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"What is DevOps?\",\n  \"body\": \"DevOps is a set of practices that combines software development and IT operations.\",\n  \"publishedYear\": 2025,\n  \"tenantId\": 2,\n  \"aliases\": [\n    { \"name\": \"DevOps Overview\" },\n    { \"name\": \"Introduction to DevOps\" }\n  ],\n  \"topicIds\": [1]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/knowledge-articles",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"knowledge-articles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000",
+			"type": "default"
+		}
+	]
+}
