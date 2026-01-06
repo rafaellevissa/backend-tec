@@ -111,7 +111,7 @@ GET /knowledge-articles?search=devops&tenantId=1&publishedYear=2024
 
 ---
 
-## 🚨 Duplicate Detection
+## Duplicate Detection
 
 When a new knowledge article is created:
 
